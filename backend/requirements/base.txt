@@ -1,0 +1,28 @@
+# ─── Django ───────────────────────────────────────────────────────────────────
+Django==5.2.1
+djangorestframework==3.16.0
+djangorestframework-simplejwt==5.5.1
+django-cors-headers==4.7.0
+drf-spectacular==0.28.0
+
+# ─── Database ─────────────────────────────────────────────────────────────────
+psycopg[binary,pool]==3.2.6
+
+# ─── Cache + Queue ────────────────────────────────────────────────────────────
+django-redis==5.4.0
+redis==5.2.1
+celery[redis]==5.5.2
+django-celery-results==2.6.0    # 2.5.1 → 2.6.0 (Django 5.2 support)
+django-celery-beat==2.9.0       # 2.7.0 → 2.9.0 (Django<5.2 cheklovini olib tashlagan)
+
+# ─── Utils ────────────────────────────────────────────────────────────────────
+django-filter==25.1
+django-environ==0.11.2
+Pillow==11.2.1
+
+# ─── Export ───────────────────────────────────────────────────────────────────
+openpyxl==3.1.5
+reportlab==4.2.5
+
+# ─── Security (timezone) ──────────────────────────────────────────────────────
+pytz==2025.1

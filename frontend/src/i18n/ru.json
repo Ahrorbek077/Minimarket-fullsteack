@@ -1,0 +1,58 @@
+{
+  "common": {
+    "save": "Сохранить", "cancel": "Отмена", "delete": "Удалить",
+    "edit": "Изменить", "add": "Добавить", "search": "Поиск",
+    "loading": "Загрузка...", "error": "Ошибка", "success": "Успешно",
+    "confirm": "Подтвердить", "close": "Закрыть", "back": "Назад",
+    "yes": "Да", "no": "Нет", "all": "Все", "total": "Итого",
+    "sum": "сум", "pcs": "шт", "date": "Дата", "status": "Статус",
+    "actions": "Действия", "view": "Просмотр", "export": "Экспорт"
+  },
+  "nav": {
+    "dashboard": "Дашборд", "pos": "Касса", "products": "Товары",
+    "purchases": "Закупки", "companies": "Компании",
+    "inventory": "Склад", "sales": "Продажи", "history": "История",
+    "reports": "Отчёты", "settings": "Настройки"
+  },
+  "auth": {
+    "login": "Войти", "logout": "Выйти", "email": "Email",
+    "password": "Пароль", "welcome": "Добро пожаловать",
+    "login_title": "Вход в систему",
+    "forgot_password": "Забыли пароль?"
+  },
+  "dashboard": {
+    "today": "Сегодня", "week": "Неделя", "month": "Месяц", "year": "Год",
+    "sales": "Продажи", "revenue": "Выручка", "profit": "Прибыль",
+    "debt": "Долг", "low_stock": "Мало на складе", "out_of_stock": "Нет в наличии",
+    "recent_sales": "Последние продажи", "top_products": "Топ товары",
+    "stock_value": "Стоимость склада", "overdue": "Просроченные"
+  },
+  "pos": {
+    "scan_or_search": "Сканируйте штрих-код или ищите",
+    "cart": "Корзина", "checkout": "Оплата", "clear_cart": "Очистить корзину",
+    "payment_method": "Способ оплаты", "cash": "Наличные", "card": "Карта",
+    "debt": "Долг", "discount": "Скидка", "total": "Итого",
+    "change": "Сдача", "pay": "Оплатить", "receipt": "Чек",
+    "empty_cart": "Корзина пуста", "product_added": "Товар добавлен"
+  },
+  "products": {
+    "title": "Товары", "add_product": "Добавить товар",
+    "name": "Название", "barcode": "Штрих-код", "category": "Категория",
+    "unit": "Единица", "cost_price": "Себестоимость", "sell_price": "Цена продажи",
+    "stock": "Остаток", "min_stock": "Мин. остаток", "profit": "Прибыль %"
+  },
+  "purchases": {
+    "title": "Закупки", "new_purchase": "Новая закупка",
+    "company": "Компания", "branch": "Филиал", "invoice": "Накладная",
+    "due_date": "Срок оплаты", "receive": "Принять",
+    "pay": "Оплатить", "cancel": "Отменить",
+    "draft": "Черновик", "received": "Принято",
+    "partial": "Частично", "paid": "Оплачено", "cancelled": "Отменено"
+  },
+  "settings": {
+    "profile": "Профиль", "language": "Язык", "theme": "Тема",
+    "change_password": "Изменить пароль", "old_password": "Старый пароль",
+    "new_password": "Новый пароль", "confirm_password": "Подтвердите пароль",
+    "light": "Светлая", "dark": "Тёмная", "system": "Системная"
+  }
+}
