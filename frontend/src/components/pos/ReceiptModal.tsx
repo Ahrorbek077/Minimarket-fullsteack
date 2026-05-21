@@ -126,7 +126,7 @@ export function ReceiptModal({ sale, onClose }: Props) {
 
             {/* Payments */}
             <div className="space-y-1 text-slate-600 dark:text-slate-300">
-              {(sale.payment_methods ?? sale.payments ?? []).map((method, i) => {
+              {(sale.payment_methods ?? []).map((method, i) => {
                 const Icon = METHOD_ICONS[method] || Banknote;
                 return (
                   <div key={i} className="flex justify-between items-center">
