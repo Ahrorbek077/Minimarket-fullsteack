@@ -139,6 +139,13 @@ class UserViewSet(SoftDeleteMixin, viewsets.ModelViewSet):
         if not self.request.user.is_super_admin:
             from .models import UserRole
             qs = qs.exclude(role=UserRole.SUPER_ADMIN)
+        search = self.request.query_params.get("search")
+        if search:
+            from django.db.models import Q
+            qs = qs.filter(Q(full_name__icontains=search) | Q(email__icontains=search))
+        role = self.request.query_params.get("role")
+        if role:
+            qs = qs.filter(role=role)
         return qs
 
     def perform_destroy(self, instance):

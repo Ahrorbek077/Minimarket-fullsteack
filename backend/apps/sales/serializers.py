@@ -75,7 +75,7 @@ class CheckoutSerializer(serializers.Serializer):
         min_value=Decimal("0"), max_value=Decimal("100"),
         default=Decimal("0"),
     )
-    note = serializers.CharField(max_length=500, required=False, default="")
+    note = serializers.CharField(max_length=500, required=False, default="", allow_blank=True)
 
 
 # ─── SaleItem ─────────────────────────────────────────────────────────────────

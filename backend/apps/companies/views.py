@@ -56,18 +56,20 @@ class CompanyViewSet(SoftDeleteMixin, viewsets.ModelViewSet):
     # ── Branch nested actions ──────────────────────────────────────────────
 
     @extend_schema(summary="Filiallar ro'yxati", tags=["Companies"])
-    @action(detail=True, methods=["get"], url_path="branches")
+    @action(detail=True, methods=["get", "post"], url_path="branches")
     def branches(self, request, pk=None):
-        company  = self.get_object()
-        branches = BranchService.get_for_company(company)
-        return Response({
-            "success": True,
-            "data": BranchSerializer(branches, many=True).data,
-        })
+        company = self.get_object()
+        if request.method == "GET":
+            branches = BranchService.get_for_company(company)
+            return Response({
+                "success": True,
+                "results": BranchSerializer(branches, many=True).data,
+                "data": BranchSerializer(branches, many=True).data,
+            })
+        # POST
+        return self.add_branch_handler(request, company)
 
-    @extend_schema(summary="Filial qo'shish", tags=["Companies"])
-    @action(detail=True, methods=["post"], url_path="branches")
-    def add_branch(self, request, pk=None):
+    def add_branch_handler(self, request, company):
         company    = self.get_object()
         serializer = BranchCreateSerializer(
             data=request.data,
