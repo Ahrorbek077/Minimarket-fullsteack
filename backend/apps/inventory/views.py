@@ -38,12 +38,25 @@ class StockViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields    = ["quantity", "product__name", "updated_at"]
 
     def get_queryset(self):
-        return (
+        qs = (
             Stock.objects
             .select_related("product", "product__unit", "product__category")
             .filter(product__deleted_at__isnull=True)
             .order_by("product__name")
         )
+        params = self.request.query_params
+        if params.get("low_stock") in ("true", "1"):
+            from django.db.models import F
+            qs = qs.filter(quantity__lte=F("product__min_stock"), quantity__gt=0)
+        if params.get("out_stock") in ("true", "1"):
+            qs = qs.filter(quantity__lte=0)
+        if params.get("search"):
+            q = params.get("search")
+            from django.db.models import Q
+            qs = qs.filter(
+                Q(product__name__icontains=q) | Q(product__barcode__icontains=q)
+            )
+        return qs
 
     @extend_schema(summary="Kam qoldiqlar", tags=["Inventory"])
     @action(detail=False, methods=["get"], url_path="low-stock")

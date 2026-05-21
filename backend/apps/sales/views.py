@@ -193,7 +193,7 @@ class SaleViewSet(SoftDeleteMixin, viewsets.ModelViewSet):
 
     @extend_schema(summary="Kunlik sotuv statistikasi", tags=["Sales"])
     @action(detail=False, methods=["get"], url_path="daily-summary",
-            permission_classes=[IsAdminOrAbove])
+            permission_classes=[IsCashier])
     def daily_summary(self, request):
         """?date=2024-01-15 yoki hozirgi kun."""
         from datetime import date

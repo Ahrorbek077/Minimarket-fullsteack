@@ -30,10 +30,14 @@ export const companyService = {
     return data.data;
   },
   async updateBranch(companyId: number, branchId: number, payload: Partial<Branch>) {
-    const { data } = await api.patch(`/companies/${companyId}/branches/${branchId}/`, payload);
+    const { data } = await api.patch(`/companies/${companyId}/branches/${branchId}/update/`, payload);
     return data.data;
   },
   async deleteBranch(companyId: number, branchId: number) {
-    await api.delete(`/companies/${companyId}/branches/${branchId}/`);
+    await api.delete(`/companies/${companyId}/branches/${branchId}/delete/`);
+  },
+  async getBranchProducts(companyId: number, branchId: number): Promise<any[]> {
+    const { data } = await api.get(`/companies/${companyId}/branches/${branchId}/products/`);
+    return data.results ?? [];
   },
 };

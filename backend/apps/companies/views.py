@@ -66,7 +66,7 @@ class CompanyViewSet(SoftDeleteMixin, viewsets.ModelViewSet):
         })
 
     @extend_schema(summary="Filial qo'shish", tags=["Companies"])
-    @action(detail=True, methods=["post"], url_path="branches/add")
+    @action(detail=True, methods=["post"], url_path="branches")
     def add_branch(self, request, pk=None):
         company    = self.get_object()
         serializer = BranchCreateSerializer(
@@ -81,7 +81,7 @@ class CompanyViewSet(SoftDeleteMixin, viewsets.ModelViewSet):
         )
 
     @extend_schema(summary="Filialni yangilash", tags=["Companies"])
-    @action(detail=True, methods=["patch"], url_path="branches/(?P<branch_id>[0-9]+)")
+    @action(detail=True, methods=["patch"], url_path="branches/(?P<branch_id>[0-9]+)/update")
     def update_branch(self, request, pk=None, branch_id=None):
         company    = self.get_object()
         branch     = BranchService.get_by_id(branch_id, company=company)
@@ -103,3 +103,31 @@ class CompanyViewSet(SoftDeleteMixin, viewsets.ModelViewSet):
         branch  = BranchService.get_by_id(branch_id, company=company)
         branch.delete()
         return Response({"success": True, "message": "Filial o'chirildi."})
+
+    @extend_schema(summary="Filial orqali xarid qilingan mahsulotlar", tags=["Companies"])
+    @action(detail=True, methods=["get"], url_path="branches/(?P<branch_id>[0-9]+)/products")
+    def branch_products(self, request, pk=None, branch_id=None):
+        """Branch ga tegishli xaridlardan mahsulotlar ro'yxati."""
+        from django.db.models import Sum, DecimalField, ExpressionWrapper, F
+        from purchases.models import Purchase, PurchaseStatus
+        from products.serializers import ProductListSerializer
+
+        company = self.get_object()
+        try:
+            branch = company.branches.get(pk=branch_id, deleted_at__isnull=True)
+        except Exception:
+            return Response({"success": False, "error": {"message": "Filial topilmadi."}}, status=404)
+
+        # Bu filialdan qilingan received xaridlardagi mahsulotlar
+        from products.models import Product
+        product_ids = (
+            Purchase.objects
+            .filter(branch=branch, status__in=[PurchaseStatus.RECEIVED, PurchaseStatus.PARTIAL, PurchaseStatus.PAID], deleted_at__isnull=True)
+            .values_list("items__product_id", flat=True)
+            .distinct()
+        )
+        products = Product.objects.filter(id__in=product_ids, deleted_at__isnull=True).select_related("category", "unit")
+        serializer = ProductListSerializer(products, many=True)
+        return Response({"success": True, "count": products.count(), "results": serializer.data})
+
+

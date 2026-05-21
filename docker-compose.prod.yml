@@ -6,13 +6,13 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB:       ${POSTGRES_DB}
-      POSTGRES_USER:     ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB:       minimarket_db
+      POSTGRES_USER:     minimarket_user
+      POSTGRES_PASSWORD: Minimarket@2026!
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U minimarket_user -d minimarket_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -51,17 +51,7 @@ services:
         condition: service_healthy
     networks:
       - internal
-    command: >
-      sh -c "python manage.py migrate --noinput &&
-             python manage.py collectstatic --noinput &&
-             gunicorn config.wsgi:application
-             --bind 0.0.0.0:8000
-             --workers 4
-             --threads 2
-             --worker-class gthread
-             --timeout 60
-             --access-logfile -
-             --error-logfile -"
+    command: sh -c "python manage.py migrate --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 2 --worker-class gthread --timeout 60"
 
   # ─── Celery Worker ──────────────────────────────────────────────────────────
   celery:
@@ -127,7 +117,6 @@ services:
       - frontend
     networks:
       - internal
-      - external
 
   # ─── Certbot (SSL) ──────────────────────────────────────────────────────────
   certbot:

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, ShoppingCart, Package, ShoppingBag,
   Building2, Warehouse, Receipt, History, BarChart3,
-  Settings, Store, ChevronRight,
+  Settings, Store, ChevronRight, Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -20,6 +20,7 @@ const navItems = [
   { href: "/sales",      icon: Receipt,         key: "sales",      roles: ["all"] },
   { href: "/history",    icon: History,         key: "history",    roles: ["admin","super_admin","accountant"] },
   { href: "/reports",    icon: BarChart3,       key: "reports",    roles: ["admin","super_admin","accountant"] },
+  { href: "/staff",      icon: Users,           key: "staff",      roles: ["admin","super_admin"] },
   { href: "/settings",   icon: Settings,        key: "settings",   roles: ["all"] },
 ];
 

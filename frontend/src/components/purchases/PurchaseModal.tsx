@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -170,6 +170,15 @@ export function PurchaseModal({ onClose, onSaved }: Props) {
               {errors.company_id && <p className="mt-1 text-xs text-red-400">Kompaniya tanlang</p>}
             </div>
 
+            {/* Branch selector — kompaniya tanlangandan keyin */}
+            {selectedCompanyId > 0 && (
+              <BranchSelector
+                companyId={selectedCompanyId}
+                value={watch("branch_id")}
+                onChange={(id) => setValue("branch_id", id)}
+              />
+            )}
+
             {/* Invoice + Due date */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -322,6 +331,59 @@ export function PurchaseModal({ onClose, onSaved }: Props) {
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+}
+
+// ─── Branch Selector Component ────────────────────────────────────────────────
+function BranchSelector({ companyId, value, onChange }: {
+  companyId: number;
+  value:     number | undefined;
+  onChange:  (id: number | undefined) => void;
+}) {
+  const { data: branches, isLoading } = useQuery({
+    queryKey: ["branches", companyId],
+    queryFn:  async () => {
+      const { api } = await import("@/lib/axios");
+      const { data } = await api.get(`/companies/${companyId}/branches/`);
+      return data.results ?? data.data ?? [];
+    },
+    enabled: companyId > 0,
+    staleTime: 30_000,
+  });
+
+  if (isLoading) return <div className="text-xs text-slate-400 py-1">Filiallar yuklanmoqda...</div>;
+  if (!branches || branches.length === 0) return (
+    <div className="text-xs text-amber-500 py-1">Bu kompaniyaning filiali yo'q. Avval filial qo'shing.</div>
+  );
+
+  return (
+    <div>
+      <label className="block text-xs font-medium text-slate-500 mb-1.5">Filial</label>
+      <div className="flex flex-wrap gap-2">
+        <button type="button"
+          onClick={() => onChange(undefined)}
+          className={cn(
+            "px-3 py-1.5 rounded-lg border text-xs transition",
+            !value
+              ? "border-brand-500 bg-brand-50 dark:bg-brand-950/30 text-brand-600"
+              : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
+          )}>
+          Aniqlanmagan
+        </button>
+        {branches.map((b: any) => (
+          <button key={b.id} type="button"
+            onClick={() => onChange(b.id)}
+            className={cn(
+              "px-3 py-1.5 rounded-lg border text-xs transition",
+              value === b.id
+                ? "border-brand-500 bg-brand-50 dark:bg-brand-950/30 text-brand-600"
+                : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
+            )}>
+            {b.name}
+          </button>
+        ))}
       </div>
     </div>
   );

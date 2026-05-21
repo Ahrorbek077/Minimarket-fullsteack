@@ -3,6 +3,6 @@ from rest_framework.routers import DefaultRouter
 from .views import AuditLogViewSet
 
 router = DefaultRouter()
-router.register("", AuditLogViewSet, basename="history")
+router.register("logs", AuditLogViewSet, basename="history")
 
 urlpatterns = [path("", include(router.urls))]
