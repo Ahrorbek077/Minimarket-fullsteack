@@ -35,7 +35,8 @@ class CompanyViewSet(SoftDeleteMixin, viewsets.ModelViewSet):
     permission_classes = [IsAdminOrAbove]
 
     def get_queryset(self):
-        return CompanyService.get_queryset()
+        search = self.request.query_params.get("search")
+        return CompanyService.get_queryset(search=search)
 
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update"):

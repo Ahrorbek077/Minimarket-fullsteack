@@ -11,9 +11,9 @@ from .models import Branch, Company
 class CompanyService:
 
     @staticmethod
-    def get_queryset():
+    def get_queryset(search=None):
         from django.db.models import Count, Q, Sum
-        return (
+        qs = (
             Company.objects
             .filter(deleted_at__isnull=True)
             .annotate(
@@ -21,7 +21,6 @@ class CompanyService:
                     "branches",
                     filter=Q(branches__deleted_at__isnull=True),
                 ),
-                # total_debt — DB da bir query da hisoblanadi (N+1 yo'q)
                 total_debt_ann=Sum(
                     "purchases__debt_amount",
                     filter=Q(
@@ -32,6 +31,9 @@ class CompanyService:
             )
             .order_by("name")
         )
+        if search:
+            qs = qs.filter(Q(name__icontains=search) | Q(phone__icontains=search) | Q(inn__icontains=search))
+        return qs
 
     @staticmethod
     @transaction.atomic
